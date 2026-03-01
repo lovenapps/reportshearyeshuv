@@ -27,15 +27,15 @@
         <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
         </div>
-        <h2 class="text-3xl font-black mb-4 text-gray-800">תודה רבה!</h2>
-        <p class="text-xl font-bold text-green-700 mb-6">ההודעה נשלחה בהצלחה.</p>
+        <h2 class="text-3xl font-black mb-4 text-gray-800 text-center">תודה רבה!</h2>
+        <p class="text-xl font-bold text-green-700 mb-6 text-center">ההודעה נשלחה בהצלחה.</p>
         <div class="bg-gray-50 rounded-xl p-4 text-sm text-gray-600 mb-6 border border-gray-100 text-right">
-            <p class="font-bold mb-2">למידע נוסף ניתן ליצור קשר:</p>
-            <p>שיר לניאדו: <a href="tel:050-6816689" class="underline font-bold">050-6816689</a></p>
-            <p>עינת רותם: <a href="tel:0544372768" class="underline font-bold">0544372768</a></p>
+            <p class="font-bold mb-2 text-right">למידע נוסף ניתן ליצור קשר:</p>
+            <p class="text-right">שיר לניאדו: <a href="tel:050-6816689" class="underline font-bold">050-6816689</a></p>
+            <p class="text-right">עינת רותם: <a href="tel:0544372768" class="underline font-bold">0544372768</a></p>
         </div>
-        <p class="text-2xl font-black text-blue-700 uppercase tracking-widest">צוות צח"י</p>
-        <p class="text-[10px] text-gray-400 mt-6 italic">לדיווח נוסף יש לרענן את הדף</p>
+        <p class="text-2xl font-black text-blue-700 uppercase tracking-widest text-center">צוות צח"י</p>
+        <p class="text-[10px] text-gray-400 mt-6 italic text-center">לדיווח נוסף יש לרענן את הדף</p>
     </div>
 
     <!-- Main Card -->
@@ -43,29 +43,38 @@
         
         <!-- Header -->
         <div class="bg-blue-600 p-6 text-center text-white">
-            <h1 class="text-2xl font-bold mb-3">מערכת דיווח חירום</h1>
+            <h1 class="text-2xl font-bold mb-3 text-center">מערכת דיווח חירום</h1>
             
-            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/20 inline-block text-sm mb-3">
+            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/20 inline-block text-sm mb-3 text-center">
                 <p class="font-bold border-b border-white/30 pb-1 mb-1 text-center">למידע נוסף ויצירת קשר:</p>
                 <div class="flex flex-col gap-0.5 text-center">
-                    <p>שיר לניאדו: <a href="tel:050-6816689" class="underline font-bold" dir="ltr">050-6816689</a></p>
-                    <p>עינת רותם: <a href="tel:0544372768" class="underline font-bold" dir="ltr">0544372768</a></p>
+                    <p class="text-center">שיר לניאדו: <a href="tel:050-6816689" class="underline font-bold" dir="ltr">050-6816689</a></p>
+                    <p class="text-center">עינת רותם: <a href="tel:0544372768" class="underline font-bold" dir="ltr">0544372768</a></p>
                 </div>
             </div>
 
-            <p class="text-blue-100 text-sm">מושב שאר ישוב</p>
+            <p class="text-blue-100 text-sm text-center">מושב שאר ישוב</p>
         </div>
 
         <div class="p-6 space-y-6 text-right">
+            
+            <!-- NEW: Anti-Double Reporting Preamble -->
+            <div class="bg-amber-50 border-r-4 border-amber-500 p-4 rounded-xl shadow-sm text-right">
+                <p class="text-amber-900 font-bold text-lg leading-tight">שימו לב שאין דיווח כפול.</p>
+                <p class="text-amber-800 text-md mt-1 italic">
+                    "בן משפחה אחד, מדווח בשביל היתר"
+                </p>
+            </div>
+
             <!-- Phone Input -->
-            <div>
-                <label class="block text-gray-700 font-semibold mb-2">מספר טלפון נייד</label>
+            <div class="text-right">
+                <label class="block text-gray-700 font-semibold mb-2 text-right">מספר טלפון נייד</label>
                 <input type="tel" id="residentPhone" placeholder="לדוגמה: 050-1234567" class="w-full p-4 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500 text-lg dir-ltr text-right">
             </div>
 
             <!-- Status Selection -->
-            <div class="space-y-3">
-                <label class="block text-gray-700 font-semibold mb-1">בחרו את מצבכם הנוכחי:</label>
+            <div class="space-y-3 text-right">
+                <label class="block text-gray-700 font-semibold mb-1 text-right">בחרו את מצבכם הנוכחי:</label>
                 
                 <button onclick="selectStatus('1')" id="btnStatus1" class="status-btn w-full py-4 px-5 rounded-2xl border-2 border-gray-100 bg-white text-green-700 font-bold text-lg flex items-center gap-4 transition-all hover:bg-green-50">
                     <div class="radio-circle w-6 h-6 rounded-full border-2 border-gray-300 transition-all flex-shrink-0"></div>
@@ -79,14 +88,14 @@
 
                 <button onclick="selectStatus('0_others')" id="btnStatus3" class="status-btn w-full py-4 px-5 rounded-2xl border-2 border-gray-100 bg-white text-blue-700 font-bold text-lg flex items-center gap-4 transition-all hover:bg-blue-50 text-right">
                     <div class="radio-circle w-6 h-6 rounded-full border-2 border-gray-300 transition-all flex-shrink-0"></div>
-                    <span class="leading-tight">אני לא נמצא, מדווח על מי שכן</span>
+                    <span class="leading-tight text-right">אני לא נמצא, מדווח על מי שכן</span>
                 </button>
             </div>
 
             <!-- Household Counts -->
             <div class="grid grid-cols-2 gap-4 text-center">
-                <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
-                    <label class="block text-xs font-bold text-emerald-900 mb-2">בני משפחה בבית:</label>
+                <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-100 text-center">
+                    <label class="block text-xs font-bold text-emerald-900 mb-2 text-center">בני משפחה בבית:</label>
                     <div class="flex items-center justify-center gap-3 text-center">
                         <button onclick="changeVal('extraFamily', -1)" class="w-8 h-8 bg-white border border-emerald-200 rounded-full font-bold text-emerald-600 shadow-sm">-</button>
                         <input type="number" id="extraFamily" value="0" readonly class="w-8 text-center font-bold bg-transparent text-lg text-emerald-900">
@@ -94,7 +103,7 @@
                     </div>
                 </div>
                 <div class="bg-blue-50 p-3 rounded-2xl border border-blue-100 text-center">
-                    <label class="block text-xs font-bold text-blue-900 mb-2">אורחים בבית:</label>
+                    <label class="block text-xs font-bold text-blue-900 mb-2 text-center">אורחים בבית:</label>
                     <div class="flex items-center justify-center gap-3 text-center">
                         <button onclick="changeVal('extraGuests', -1)" class="w-8 h-8 bg-white border border-blue-200 rounded-full font-bold text-blue-600 shadow-sm">-</button>
                         <input type="number" id="extraGuests" value="0" readonly class="w-8 text-center font-bold bg-transparent text-lg text-blue-900 text-center">
