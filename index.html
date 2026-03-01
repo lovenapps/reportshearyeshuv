@@ -15,27 +15,38 @@
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
 
     <script>
-        // הקישור לסקריפט גוגל
+        /**
+         * מנהל יקר:
+         * הדבק כאן את קישור ה-Web App שקיבלת מגוגל Apps Script!
+         */
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwFaDGqPxEsM5Gfx0gV-u5P5UFOOJmo-onJWUqz5VxvSvvDdOZIq3joGhgHJTB0TJdi7Q/exec"; 
     </script> 
 
     <!-- Success View -->
     <div id="successView" class="hidden max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border-4 border-green-500">
+        <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+        </div>
         <h2 class="text-3xl font-black mb-4">תודה רבה!</h2>
         <p class="text-xl font-bold text-green-700 mb-6">ההודעה נשלחה בהצלחה.</p>
-        <p class="text-gray-600 mb-2">למידע נוסף: שיר 050-6816689 | עינת 054-4372768</p>
+        <div class="bg-gray-50 rounded-xl p-4 text-sm text-gray-600 mb-6 border border-gray-100">
+            <p class="font-bold mb-2">למידע נוסף ניתן ליצור קשר:</p>
+            <p>שיר לניאדו: <a href="tel:050-6816689" class="underline font-bold">050-6816689</a></p>
+            <p>עינת רותם: <a href="tel:0544372768" class="underline font-bold">0544372768</a></p>
+        </div>
         <p class="text-2xl font-black text-blue-700 uppercase tracking-widest">צוות צח"י</p>
+        <p class="text-[10px] text-gray-400 mt-6 italic">לדיווח נוסף יש לרענן את הדף</p>
     </div>
 
     <div id="mainCard" class="max-w-md w-full bg-white rounded-3xl shadow-xl overflow-hidden">
         
-        <!-- Header with Contact Info -->
+        <!-- Header -->
         <div class="bg-blue-600 p-6 text-center text-white">
             <h1 class="text-2xl font-bold mb-3">מערכת דיווח חירום</h1>
             
             <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/20 inline-block text-sm mb-3">
-                <p class="font-bold border-b border-white/30 pb-1 mb-1">למידע נוסף ויצירת קשר:</p>
-                <div class="flex flex-col gap-0.5">
+                <p class="font-bold border-b border-white/30 pb-1 mb-1 text-center">למידע נוסף ויצירת קשר:</p>
+                <div class="flex flex-col gap-0.5 text-center">
                     <p>שיר לניאדו: <a href="tel:050-6816689" class="underline font-bold" dir="ltr">050-6816689</a></p>
                     <p>עינת רותם: <a href="tel:0544372768" class="underline font-bold" dir="ltr">0544372768</a></p>
                 </div>
@@ -45,13 +56,13 @@
         </div>
 
         <div class="p-6 space-y-6 text-right">
-            <!-- Identification -->
+            <!-- Phone Input -->
             <div>
                 <label class="block text-gray-700 font-semibold mb-2">מספר טלפון נייד</label>
                 <input type="tel" id="residentPhone" placeholder="לדוגמה: 050-1234567" class="w-full p-4 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500 text-lg dir-ltr text-right">
             </div>
 
-            <!-- Custom Radio Style Buttons -->
+            <!-- Status Buttons with Circles -->
             <div class="space-y-3">
                 <label class="block text-gray-700 font-semibold mb-1">בחרו את מצבכם הנוכחי:</label>
                 
@@ -74,18 +85,18 @@
             <!-- Household counts -->
             <div class="grid grid-cols-2 gap-4">
                 <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-100 text-center">
-                    <label class="block text-xs font-bold text-emerald-900 mb-2 text-center">בני משפחה בבית:</label>
+                    <label class="block text-xs font-bold text-emerald-900 mb-2">בני משפחה בבית:</label>
                     <div class="flex items-center justify-center gap-3">
                         <button onclick="changeVal('extraFamily', -1)" class="w-8 h-8 bg-white border border-emerald-200 rounded-full font-bold text-emerald-600 shadow-sm">-</button>
                         <input type="number" id="extraFamily" value="0" readonly class="w-8 text-center font-bold bg-transparent text-lg text-emerald-900">
                         <button onclick="changeVal('extraFamily', 1)" class="w-8 h-8 bg-emerald-600 text-white rounded-full font-bold shadow-md">+</button>
                     </div>
                 </div>
-                <div class="bg-blue-50 p-3 rounded-2xl border border-blue-100 text-center text-center">
-                    <label class="block text-xs font-bold text-blue-900 mb-2 text-center">אורחים בבית:</label>
+                <div class="bg-blue-50 p-3 rounded-2xl border border-blue-100 text-center">
+                    <label class="block text-xs font-bold text-blue-900 mb-2">אורחים בבית:</label>
                     <div class="flex items-center justify-center gap-3">
                         <button onclick="changeVal('extraGuests', -1)" class="w-8 h-8 bg-white border border-blue-200 rounded-full font-bold text-blue-600 shadow-sm">-</button>
-                        <input type="number" id="extraGuests" value="0" readonly class="w-8 text-center font-bold bg-transparent text-lg text-blue-900">
+                        <input type="number" id="extraGuests" value="0" readonly class="w-8 text-center font-bold bg-transparent text-lg text-blue-900 text-center">
                         <button onclick="changeVal('extraGuests', 1)" class="w-8 h-8 bg-blue-600 text-white rounded-full font-bold shadow-md">+</button>
                     </div>
                 </div>
@@ -103,16 +114,14 @@
         let currentStatus = null;
 
         function selectStatus(val) {
-            // Internal mapping
+            // Internal mapping: 0_others sends 0 as status
             currentStatus = (val === '0_others') ? '0' : val;
             
-            // UI Update: Reset all
             document.querySelectorAll('.status-btn').forEach(b => {
                 b.classList.remove('selected', 'border-green-600', 'border-red-600', 'border-blue-600', 'bg-green-50', 'bg-red-50', 'bg-blue-50');
                 b.classList.add('border-gray-100', 'bg-white');
             });
 
-            // Set active
             const btnId = val === '1' ? 'btnStatus1' : (val === '0' ? 'btnStatus0' : 'btnStatus3');
             const activeBtn = document.getElementById(btnId);
             activeBtn.classList.add('selected');
@@ -136,20 +145,27 @@
 
             if (phone.replace(/\D/g, '').length < 6 || currentStatus === null) {
                 fb.textContent = "אנא מלאו טלפון ובחרו את מצבכם";
-                fb.className = "p-4 rounded-xl text-center font-bold text-sm bg-red-100 text-red-700 block";
+                fb.className = "p-4 rounded-xl text-center font-bold text-sm bg-red-100 text-red-700 block text-center";
+                fb.classList.remove('hidden');
                 return;
             }
 
             this.disabled = true;
-            const originalText = this.innerHTML;
             this.innerHTML = "שולח נתונים...";
 
+            // CREATE CLEAN DD/MM/YYYY FORMAT
+            const now = new Date();
+            const d = String(now.getDate()).padStart(2, '0');
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const y = now.getFullYear();
+            const cleanDate = `${d}/${m}/${y}`;
+
             const formData = new URLSearchParams();
-            formData.append('id', phone); // שולח טלפון מלא
+            formData.append('id', phone); 
             formData.append('status', currentStatus);
             formData.append('guests', guests);
             formData.append('family', family);
-            formData.append('timestamp', new Date().toLocaleString('he-IL'));
+            formData.append('timestamp', cleanDate); 
 
             fetch(GOOGLE_SCRIPT_URL, { 
                 method: 'POST', 
@@ -163,9 +179,9 @@
             })
             .catch(() => {
                 fb.textContent = "שגיאת תקשורת. נסו שוב.";
-                fb.className = "p-4 rounded-xl text-center font-bold text-sm bg-red-100 text-red-700 block";
+                fb.className = "p-4 rounded-xl text-center font-bold text-sm bg-red-100 text-red-700 block text-center";
                 this.disabled = false;
-                this.innerHTML = originalText;
+                this.innerHTML = "שלח דיווח מעודכן";
             });
         });
     </script>
