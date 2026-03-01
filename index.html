@@ -7,130 +7,151 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap');
-        body { font-family: 'Rubik', sans-serif; background-color: #f3f4f6; }
-        .status-btn.selected { border-color: currentColor; }
-        .status-btn.selected .radio-circle { background-color: currentColor; border-color: currentColor; box-shadow: inset 0 0 0 4px white; }
+        body { font-family: 'Rubik', sans-serif; background-color: #f3f4f6; transition: background-color 0.5s ease; }
+        .status-btn.selected { ring: 6px; transform: scale(1.05); }
+        .report-card { transition: all 0.4s ease; }
+        .bg-reported { background-color: #f0fdf4; border-color: #bbf7d0; } 
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
+<body class="min-h-screen flex flex-col items-center justify-center p-4 gap-6" id="bodyBg">
 
     <script>
-        /**
-         * מנהל יקר:
-         * הקישור ל-Apps Script המעודכן מוטמע כאן.
-         */
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzFkbEjcm8Fj4zq2qNr0sAax9k_WwkN203fOx3UhR7HWKwI-tAbahvhNq-JN3WMggBoTA/exec"; 
-    </script> 
+        // הקישור לסקריפט גוגל - נשמר ללא שינוי
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwN3gU0G0AXfNYikmF8Y14UYYYXb0vsgzgGlYLcGN4l3APgBavXUU7125Hoa6TRBiX7EA/exec"; 
+    </script>
 
     <!-- Success View -->
     <div id="successView" class="hidden max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border-4 border-green-500">
-        <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+        <div class="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
         </div>
-        <h2 class="text-3xl font-black mb-4 text-gray-800">תודה רבה!</h2>
+        <h2 class="text-3xl font-black text-gray-800 mb-4 tracking-tight">תודה רבה!</h2>
         <p class="text-xl font-bold text-green-700 mb-6">ההודעה נשלחה בהצלחה.</p>
-        <div class="bg-gray-50 rounded-xl p-4 text-sm text-gray-600 mb-6 border border-gray-100 text-right">
-            <p class="font-bold mb-2">למידע נוסף ניתן ליצור קשר:</p>
-            <p>שיר לניאדו: <a href="tel:050-6816689" class="underline font-bold">050-6816689</a></p>
-            <p>עינת רותם: <a href="tel:0544372768" class="underline font-bold">0544372768</a></p>
+        
+        <div class="bg-gray-50 rounded-2xl p-6 mb-6 text-right border border-gray-100 shadow-sm">
+            <p class="text-gray-700 font-bold mb-3 border-b border-gray-200 pb-2 text-center">למידע נוסף ניתן ליצור קשר:</p>
+            <div class="space-y-2 text-md">
+                <p class="flex justify-between items-center"><span>שיר לניאדו:</span> <a href="tel:050-6816689" class="font-black text-blue-600 underline" dir="ltr">050-6816689</a></p>
+                <p class="flex justify-between items-center"><span>עינת רותם:</span> <a href="tel:0544372768" class="font-black text-blue-600 underline" dir="ltr">0544372768</a></p>
+            </div>
         </div>
         <p class="text-2xl font-black text-blue-700 uppercase tracking-widest">צוות צח"י</p>
-        <p class="text-[10px] text-gray-400 mt-6 italic">לדיווח נוסף יש לרענן את הדף</p>
     </div>
 
-    <!-- Main Card -->
-    <div id="mainCard" class="max-w-md w-full bg-white rounded-3xl shadow-xl overflow-hidden">
+    <!-- Main Reporting UI -->
+    <div id="mainCard" class="max-w-md w-full bg-white rounded-3xl shadow-xl overflow-hidden report-card border-4 border-transparent">
         
         <!-- Header -->
-        <div class="bg-blue-600 p-6 text-center text-white">
+        <div id="headerBar" class="bg-blue-600 p-6 text-center text-white transition-colors duration-500">
             <h1 class="text-2xl font-bold mb-3">מערכת דיווח חירום</h1>
-            
-            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/20 inline-block text-sm mb-3">
-                <p class="font-bold border-b border-white/30 pb-1 mb-1 text-center">למידע נוסף ויצירת קשר:</p>
-                <div class="flex flex-col gap-0.5 text-center">
-                    <p>שיר לניאדו: <a href="tel:050-6816689" class="underline font-bold" dir="ltr">050-6816689</a></p>
-                    <p>עינת רותם: <a href="tel:0544372768" class="underline font-bold" dir="ltr">0544372768</a></p>
-                </div>
-            </div>
-
-            <p class="text-blue-100 text-sm">מושב שאר ישוב</p>
+            <p class="text-blue-100 mt-1 uppercase text-center">מושב שאר ישוב</p>
         </div>
 
         <div class="p-6 space-y-6 text-right">
+            
+            <!-- NEW: Anti-Double Reporting Preamble (Requested Text) -->
+            <div class="bg-amber-50 border-r-4 border-amber-500 p-5 rounded-xl shadow-sm text-right">
+                <div class="flex items-start gap-3">
+                    <svg class="w-6 h-6 text-amber-600 mt-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <div>
+                        <p class="text-amber-900 font-black text-lg leading-tight">שימו לב שאין דיווח כפול.</p>
+                        <p class="text-amber-800 font-bold text-md mt-1 italic">
+                            "בן משפחה אחד, מדווח בשביל היתר"
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <p class="text-gray-600 font-medium">אנא הזדהו ובחרו את מצבכם הנוכחי</p>
+            </div>
+
             <!-- Phone Input -->
             <div>
                 <label class="block text-gray-700 font-semibold mb-2">מספר טלפון נייד</label>
-                <input type="tel" id="residentPhone" placeholder="לדוגמה: 050-1234567" class="w-full p-4 border-2 border-gray-200 rounded-xl outline-none focus:border-blue-500 text-lg dir-ltr text-right">
+                <input type="tel" id="residentPhone" placeholder="לדוגמה: 050-1234567" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-0 focus:border-blue-500 outline-none text-lg transition-all dir-ltr text-right">
             </div>
 
-            <!-- Status Selection -->
-            <div class="space-y-3">
-                <label class="block text-gray-700 font-semibold mb-1">בחרו את מצבכם הנוכחי:</label>
-                
-                <button onclick="selectStatus('1')" id="btnStatus1" class="status-btn w-full py-4 px-5 rounded-2xl border-2 border-gray-100 bg-white text-green-700 font-bold text-lg flex items-center gap-4 transition-all hover:bg-green-50">
-                    <div class="radio-circle w-6 h-6 rounded-full border-2 border-gray-300 transition-all flex-shrink-0"></div>
-                    <span>אני נמצא/ת במושב</span>
-                </button>
-
-                <button onclick="selectStatus('0')" id="btnStatus0" class="status-btn w-full py-4 px-5 rounded-2xl border-2 border-gray-100 bg-white text-red-700 font-bold text-lg flex items-center gap-4 transition-all hover:bg-red-50">
-                    <div class="radio-circle w-6 h-6 rounded-full border-2 border-gray-300 transition-all flex-shrink-0"></div>
-                    <span>אני לא במושב</span>
-                </button>
-
-                <button onclick="selectStatus('0_others')" id="btnStatus3" class="status-btn w-full py-4 px-5 rounded-2xl border-2 border-gray-100 bg-white text-blue-700 font-bold text-lg flex items-center gap-4 transition-all hover:bg-blue-50 text-right">
-                    <div class="radio-circle w-6 h-6 rounded-full border-2 border-gray-300 transition-all flex-shrink-0"></div>
-                    <span class="leading-tight">אני לא נמצא, מדווח על מי שכן</span>
-                </button>
+            <!-- Status -->
+            <div>
+                <label class="block text-gray-700 font-semibold mb-3">בחרו סטטוס נוכחות</label>
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="selectStatus('1')" id="btnStatus1" class="status-btn py-5 px-2 rounded-2xl border-2 border-green-200 bg-green-50 text-green-700 font-bold hover:bg-green-100 transition-all flex flex-col items-center gap-3">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-md">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <span class="text-lg">אני נמצא</span>
+                    </button>
+                    <button onclick="selectStatus('0')" id="btnStatus0" class="status-btn py-5 px-2 rounded-2xl border-2 border-red-200 bg-red-50 text-red-700 font-bold hover:bg-red-100 transition-all flex flex-col items-center gap-3">
+                        <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center shadow-md">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </div>
+                        <span class="text-lg text-center">אני לא נמצא</span>
+                    </button>
+                </div>
             </div>
 
             <!-- Household Counts -->
-            <div class="grid grid-cols-2 gap-4 text-center">
-                <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
-                    <label class="block text-xs font-bold text-emerald-900 mb-2">בני משפחה בבית:</label>
-                    <div class="flex items-center justify-center gap-3 text-center">
-                        <button onclick="changeVal('extraFamily', -1)" class="w-8 h-8 bg-white border border-emerald-200 rounded-full font-bold text-emerald-600 shadow-sm">-</button>
-                        <input type="number" id="extraFamily" value="0" readonly class="w-8 text-center font-bold bg-transparent text-lg text-emerald-900">
-                        <button onclick="changeVal('extraFamily', 1)" class="w-8 h-8 bg-emerald-600 text-white rounded-full font-bold shadow-md">+</button>
+            <div class="space-y-4">
+                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 shadow-sm">
+                    <label class="block text-emerald-900 font-bold mb-3 text-center text-sm italic">בני משפחה נוספים בבית (מלבדך)?</label>
+                    <div class="flex items-center justify-center gap-4">
+                        <button onclick="changeVal('extraFamily', -1)" class="w-10 h-10 bg-white shadow-sm rounded-full text-xl font-bold text-emerald-600 hover:bg-emerald-100 transition-all focus:outline-none">-</button>
+                        <input type="number" id="extraFamily" value="0" min="0" readonly class="w-16 text-center text-2xl font-bold bg-transparent border-none outline-none text-emerald-900 focus:ring-0">
+                        <button onclick="changeVal('extraFamily', 1)" class="w-10 h-10 bg-emerald-600 shadow-sm rounded-full text-xl font-bold text-white hover:bg-emerald-700 transition-all focus:outline-none">+</button>
                     </div>
                 </div>
-                <div class="bg-blue-50 p-3 rounded-2xl border border-blue-100 text-center">
-                    <label class="block text-xs font-bold text-blue-900 mb-2">אורחים בבית:</label>
-                    <div class="flex items-center justify-center gap-3 text-center">
-                        <button onclick="changeVal('extraGuests', -1)" class="w-8 h-8 bg-white border border-blue-200 rounded-full font-bold text-blue-600 shadow-sm">-</button>
-                        <input type="number" id="extraGuests" value="0" readonly class="w-8 text-center font-bold bg-transparent text-lg text-blue-900 text-center">
-                        <button onclick="changeVal('extraGuests', 1)" class="w-8 h-8 bg-blue-600 text-white rounded-full font-bold shadow-md">+</button>
+
+                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 shadow-sm text-center">
+                    <label class="block text-blue-900 font-bold mb-3 text-center text-sm italic">אורחים נוספים בבית?</label>
+                    <div class="flex items-center justify-center gap-4">
+                        <button onclick="changeVal('extraGuests', -1)" class="w-10 h-10 bg-white shadow-sm rounded-full text-xl font-bold text-blue-600 hover:bg-blue-100 transition-all focus:outline-none">-</button>
+                        <input type="number" id="extraGuests" value="0" min="0" readonly class="w-16 text-center text-2xl font-bold bg-transparent border-none outline-none text-blue-900 focus:ring-0 text-center">
+                        <button onclick="changeVal('extraGuests', 1)" class="w-10 h-10 bg-blue-600 shadow-sm rounded-full text-xl font-bold text-white hover:bg-blue-700 transition-all focus:outline-none">+</button>
                     </div>
                 </div>
             </div>
 
-            <button id="btnSubmit" class="w-full py-5 bg-blue-600 text-white rounded-[1.25rem] font-bold text-xl shadow-xl hover:bg-blue-700 active:scale-95 transition-all text-center">
+            <button id="btnSubmit" class="w-full py-5 bg-blue-600 text-white rounded-xl font-bold text-xl shadow-lg hover:bg-blue-700 active:scale-95 transition-all text-center">
                 שלח דיווח מעודכן
             </button>
-            
+
             <div id="feedback" class="hidden p-4 rounded-xl text-center font-bold text-sm"></div>
         </div>
     </div>
 
+    <!-- Nortech Footer Credit -->
+    <footer class="text-center max-w-md w-full bg-white/60 backdrop-blur-sm p-4 rounded-2xl border border-gray-200 shadow-sm text-gray-600 text-xs leading-relaxed" id="footerArea">
+        <p class="mb-1 font-medium italic">רוצים לבנות ממשק כזה בעצמכם? כנסו לנורטק, ומצאו את ההזדמנות או הקהילה הקרובה לביתכם</p>
+        <a href="https://www.NORTECH-PLATFORM.COM" target="_blank" class="font-bold text-blue-600 underline hover:text-blue-800 transition-colors tracking-wide uppercase">WWW.NORTECH-PLATFORM.COM</a>
+    </footer>
+
     <script>
         let currentStatus = null;
+        const mainCard = document.getElementById('mainCard');
+        const headerBar = document.getElementById('headerBar');
+        const successView = document.getElementById('successView');
+        const footerArea = document.getElementById('footerArea');
 
         function selectStatus(val) {
-            // Internal mapping: 0_others sends 0 as status
-            currentStatus = (val === '0_others') ? '0' : val;
+            currentStatus = val;
+            document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('ring-6', 'ring-green-400', 'ring-red-400', 'scale-105'));
             
-            document.querySelectorAll('.status-btn').forEach(b => {
-                b.classList.remove('selected', 'border-green-600', 'border-red-600', 'border-blue-600', 'bg-green-50', 'bg-red-50', 'bg-blue-50');
-                b.classList.add('border-gray-100', 'bg-white');
-            });
+            if(val === '1') {
+                document.getElementById('btnStatus1').classList.add('ring-6', 'ring-green-400', 'scale-105');
+                applyTheme('reported');
+            } else {
+                document.getElementById('btnStatus0').classList.add('ring-6', 'ring-red-400', 'scale-105');
+                applyTheme('reported');
+            }
+        }
 
-            const btnId = val === '1' ? 'btnStatus1' : (val === '0' ? 'btnStatus0' : 'btnStatus3');
-            const activeBtn = document.getElementById(btnId);
-            activeBtn.classList.add('selected');
-            activeBtn.classList.remove('border-gray-100', 'bg-white');
-            
-            if (val === '1') activeBtn.classList.add('border-green-600', 'bg-green-50');
-            if (val === '0') activeBtn.classList.add('border-red-600', 'bg-red-50');
-            if (val === '0_others') activeBtn.classList.add('border-blue-600', 'bg-blue-50');
+        function applyTheme(state) {
+            if(state === 'reported') {
+                mainCard.classList.add('bg-reported');
+                mainCard.style.borderColor = "#bbf7d0";
+                headerBar.style.backgroundColor = "#16a34a"; // Green header
+            }
         }
 
         function changeVal(id, delta) {
@@ -139,49 +160,41 @@
         }
 
         document.getElementById('btnSubmit').addEventListener('click', function() {
-            const phone = document.getElementById('residentPhone').value.trim();
-            const family = document.getElementById('extraFamily').value;
+            const fullPhone = document.getElementById('residentPhone').value.trim();
             const guests = document.getElementById('extraGuests').value;
+            const family = document.getElementById('extraFamily').value;
             const fb = document.getElementById('feedback');
 
-            if (phone.replace(/\D/g, '').length < 6 || currentStatus === null) {
-                fb.textContent = "אנא מלאו טלפון ובחרו את מצבכם";
+            if (fullPhone.replace(/\D/g, '').length < 6 || currentStatus === null) {
+                fb.textContent = "אנא מלאו טלפון (לפחות 6 ספרות) ובחרו סטטוס";
                 fb.className = "p-4 rounded-xl text-center font-bold text-sm bg-red-100 text-red-700 block text-center";
                 fb.classList.remove('hidden');
                 return;
             }
 
             this.disabled = true;
-            this.innerHTML = "שולח נתונים...";
-
-            // CREATE CLEAN DD/MM/YYYY FORMAT
-            const now = new Date();
-            const d = String(now.getDate()).padStart(2, '0');
-            const m = String(now.getMonth() + 1).padStart(2, '0');
-            const y = now.getFullYear();
-            const cleanDate = `${d}/${m}/${y}`;
+            this.innerHTML = "שולח דיווח...";
 
             const formData = new URLSearchParams();
-            formData.append('id', phone); 
+            formData.append('id', fullPhone); 
             formData.append('status', currentStatus);
             formData.append('guests', guests);
             formData.append('family', family);
-            formData.append('timestamp', cleanDate); 
+            formData.append('timestamp', new Date().toLocaleDateString('he-IL'));
 
-            fetch(GOOGLE_SCRIPT_URL, { 
-                method: 'POST', 
-                mode: 'no-cors', 
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
-                body: formData.toString() 
-            })
-            .then(() => {
-                document.getElementById('mainCard').classList.add('hidden');
-                document.getElementById('successView').classList.remove('hidden');
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            }).then(() => {
+                mainCard.classList.add('hidden');
+                footerArea.classList.add('hidden');
+                successView.classList.remove('hidden');
                 document.body.style.backgroundColor = "#ecfdf5";
-            })
-            .catch(() => {
+            }).catch(() => {
                 fb.textContent = "שגיאת תקשורת. נסו שוב.";
-                fb.className = "p-4 rounded-xl text-center font-bold text-sm bg-red-100 text-red-700 block text-center text-center";
+                fb.className = "p-4 rounded-xl text-center font-bold text-sm bg-red-100 text-red-700 block text-center";
                 this.disabled = false;
                 this.innerHTML = "שלח דיווח מעודכן";
             });
